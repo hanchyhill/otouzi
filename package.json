@@ -10,6 +10,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "open": "^0.0.5",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "socks5-http-client": "^1.0.3",
+    "socks5-https-client": "^1.2.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

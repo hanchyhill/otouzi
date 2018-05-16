@@ -51,7 +51,8 @@ var options = {
 };
 
 rp(options)
-  .then(function (res) {
+  .then(function (full) {
+    let res = full.response;
     let newCookies =  undefined;
     if (res.headers['set-cookie'] instanceof Array){
       newCookies = res.headers['set-cookie'].map(tough.Cookie.parse);

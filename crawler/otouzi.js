@@ -21,10 +21,19 @@ const config = {
           let available = $(elem).find('.list-detail-balance span').text();
           let interestRate = $(elem).find('.list-detail-earnings span').text();
           let deadline = $(elem).find('.list-detail-deadline span').text();
+          let test = $(elem).find('.list-detail-mess').eq(1).text();
+          let test2 = $(elem).find('.list-detail-mess');
+          let isFix = $(elem).find('.list-detail-mess').eq(0).find('.list-detail-right').text().includes('固定');// 固定 自愿
           let method = $(elem).find('.list-detail-mess').eq(1).find('.list-detail-earnings').text();
-          let duration = $(elem).find('.list-detail-mess').eq(1).find('.list-detail-deadline').text();
+          let duration = '';
+          if(isFix){
+            duration = available;
+          }else{
+            duration = $(elem).find('.list-detail-mess').eq(1).find('.list-detail-deadline').text();
+          }
+          
           listArr[i]={
-            url, available, title, interestRate, deadline, method, duration,
+            url, available, title, interestRate, deadline, method, duration,isFix,
           };
         })
       }else{
@@ -41,12 +50,18 @@ const config = {
        * title 标题
        */
       const investlist = listArr.map(ele=>{
-        const url = 'https://www.otouzi.com/' + ele.url;
-        const available = Number.parseFloat(ele.available);
+        const url = 'https://www.otouzi.com' + ele.url;
+        const available = Number.parseFloat(ele.available.replace(',',''));
         const deadline = Number.parseInt(ele.deadline);
         const regex1 = /\d+/;
         // const test = regex1.exec(ele.duration);
-        const duration = Number.parseInt(regex1.exec(ele.duration)[0]);
+        let regTest = regex1.exec(ele.duration);
+        let duration = '';
+        if(regTest){
+          const duration = Number.parseInt(regTest[0]);
+        }else{
+          console.log('ele.duration error:'+ele.title);
+        }
         const interestRate = Number.parseFloat(ele.interestRate);
         const method = ele.method.includes('等本等息');
         const id = Number.parseInt(regex1.exec(ele.url)[0]);
@@ -81,16 +96,17 @@ function main(){
   queryData(config.otouzi.url, config.otouzi.filter)
   .then(data=>{
     data.forEach(elem => {
-      if(elem.method && elem.duration==12 && elem.deadline>=6
-      && !isOpen.includes(elem.id) ){//&& elem.available>0){
+      /* if(elem.method && elem.duration==12 && elem.deadline>=6
+      && !isOpen.includes(elem.id) && elem.available>0){ */
+      if(!isOpen.includes(elem.id) && elem.available>0){
         open(elem.url,'iexplore');
         isOpen.push(elem.id);
-        console.log('打开');
+        console.log((new Date()).toString()+'打开');
         console.log(elem);
       }else{
       };
     });
-    console.log('完成搜索');
+    // console.log('完成搜索');
   })
   .catch(err=>{console.log(err)});
 

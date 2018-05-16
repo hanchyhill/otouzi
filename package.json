@@ -16,6 +16,7 @@
     "request-promise": "^4.2.2",
     "socks5-http-client": "^1.0.3",
     "socks5-https-client": "^1.2.1",
+    "tough-cookie": "^2.3.4",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

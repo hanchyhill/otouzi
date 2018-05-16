@@ -9,7 +9,7 @@ const config = {
     name:'otouzi',
     url:'https://www.otouzi.com/p2p',
     filter(html){
-      
+
       const $ = cheerio.load(html,{decodeEntities: false});
       const mainBlocks = $('.list-detail');
       // console.log(mainBlocks.length);
@@ -31,7 +31,7 @@ const config = {
           }else{
             duration = $(elem).find('.list-detail-mess').eq(1).find('.list-detail-deadline').text();
           }
-          
+
           listArr[i]={
             url, available, title, interestRate, deadline, method, duration,isFix,
           };
@@ -39,7 +39,7 @@ const config = {
       }else{
         throw new Error('no list');
       };
-      
+
       /**
        * url 地址
        * available 可投资金额
@@ -55,10 +55,10 @@ const config = {
         const deadline = Number.parseInt(ele.deadline);
         const regex1 = /\d+/;
         // const test = regex1.exec(ele.duration);
-        let regTest = regex1.exec(ele.duration);
-        let duration = '';
+        let regTest = regex1.exec(ele.duration.replace(/\n/g,''));
+        let duration = null;
         if(regTest){
-          const duration = Number.parseInt(regTest[0]);
+          duration = Number.parseInt(regTest[0]);
         }else{
           console.log('ele.duration error:'+ele.title);
         }

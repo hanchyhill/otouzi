@@ -1,3 +1,6 @@
+/**
+ * TODO 捕获天标和月标
+ */
 const {requestMeothods, myLogger} = require('./lib/util.js');
 const cheerio = require('cheerio');
 const open = require('open');
@@ -54,11 +57,14 @@ const config = {
         const available = Number.parseFloat(ele.available.replace(',',''));
         const deadline = Number.parseInt(ele.deadline);
         const regex1 = /\d+/;
+        const isFix = ele.isFix;
         // const test = regex1.exec(ele.duration);
         let regTest = regex1.exec(ele.duration.replace(/\n/g,''));
         let duration = null;
-        if(regTest){
+        if(regTest&&!isFix){
           duration = Number.parseInt(regTest[0]);
+        }else if(isFix){
+          duration = deadline;
         }else{
           console.log('ele.duration error:'+ele.title);
         }
@@ -66,7 +72,7 @@ const config = {
         const method = ele.method.includes('等本等息');
         const id = Number.parseInt(regex1.exec(ele.url)[0]);
         return {
-          url, available, deadline, duration, interestRate, method, title:ele.title, id
+          url, available, deadline, duration, interestRate, method, title:ele.title, id, isFix,
         };
       })
       return investlist;
@@ -81,9 +87,9 @@ async function queryData(url, callback) {
   };
   resolveWithFullResponse: true;
   let data = await requestMeothods.pResopne(options)
-  .catch(err=>{
+  /* .catch(err=>{
     console.error(err);
-  });
+  }); */
   if(!data.response){
     return '没有响应体';
   }
@@ -110,7 +116,7 @@ function main(){
   })
   .catch(err=>{console.log(err)});
 
-  setTimeout(main, 10000);
+  setTimeout(main, 5000);
 }
 
 main();

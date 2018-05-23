@@ -105,7 +105,7 @@ function main(){
       /* if(elem.method && elem.duration==12 && elem.deadline>=6
       && !isOpen.includes(elem.id) && elem.available>0){ */
       if(!isOpen.includes(elem.id) && elem.available>0){
-        open(elem.url,'iexplore');
+        open(elem.url,'firefox');
         isOpen.push(elem.id);
         console.log((new Date()).toString()+'打开');
         console.log(elem);
